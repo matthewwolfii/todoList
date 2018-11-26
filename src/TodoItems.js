@@ -1,27 +1,32 @@
 import React, { Component } from 'react'
 
 class TodoItems extends Component {
-  createTasks = item => {
+  createTasks = (item) => {
     return (
-      <li key={item.key} /*onClick={ () => this.props.deleteItem(item.key) }*/  >
-      <input type ="checkbox"/>{item.text}</li>
+      <li key={item.key}>
+        <input type="checkbox"
+          checked={item.complete}
+          onChange={()=>this.props.toggleComplete(item.key)}/>
+        {item.text}
+      </li>
     )
   }
   
   render() {
     const todoEntries = this.props.entries
-    const listItems = todoEntries.map(this.createTasks)
-    
-    //const activeItems = listItems.filter( item => item.complete === false)
-    //const completeItems = listItems.filter( item => item.complete === true)
-  
-    
-    return <div>
-    <p>Active:</p>
-    <ul className="theList">{ listItems }</ul>
-    <p>Completed:</p>
-    <ul className="theList">{ listItems }</ul>
+    console.log(todoEntries)
+    let listItems
+    if (this.props.showComplete){
+      listItems = todoEntries.filter(item => item.complete).map(this.createTasks)
+    }else{
+      listItems = todoEntries.filter(item => !item.complete).map(this.createTasks)
+    }
+    return (
+    <div>
+    <label>{this.props.title}</label><br />
+    <ul className="theList">{listItems}</ul>
     </div>
+    )
   }
 }
 

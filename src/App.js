@@ -11,14 +11,53 @@ class App extends Component {
       currentItem: {text:'', key:'', complete : false},
     }
   }
+  
+  inputElement = React.createRef()
+  
   handleInput = e => {
+    const new_current = {
+      text: e.target.value, 
+      key: Date.now(), 
+      complete: false
+    }
+      
+    console.log("new current: ")
+    console.log(new_current)
+    this.setState({
+      currentItem: new_current
+    })
+    /*
     const itemText = e.target.value
     const currentItem = { text: itemText, key: Date.now() }
     console.log({text: itemText, key: Date.now() })
     this.setState({
       currentItem,
     })
+    */
   }
+  
+  toggleComplete = key => {
+    const updatedItems = this.state.items.map(item => {
+      return item.key === key? {...item, complete: !item.complete}:item
+    })
+    this.setState({
+      items: updatedItems,
+      currentItem: {text: '', key: '', complete: false},
+    })
+    console.log("Complete")
+    /*
+    this.setState(
+      this.state.items.map(item => {
+        if (item.key === key){
+          return {...item, complete: !item.complete}
+        } else{
+          return item
+        }
+      }))
+      console.log("Complete")
+      */
+  }
+  
   addItem = e => {
     e.preventDefault()
     const newItem = this.state.currentItem
@@ -36,17 +75,7 @@ class App extends Component {
     }
     console.log('Add Item')
   }
-  toggleComplete = key => {
-    this.setState(
-      this.state.items.map(item => {
-        if (item.key === key){
-          return {...item, complete: !item.complete}
-        } else{
-          return item
-        }
-      }))
-      console.log("Completed")
-  }
+  
   deleteItem = key => {
     const filteredItems = this.state.items.filter(item => {
       return item.key !== key
@@ -65,9 +94,18 @@ class App extends Component {
         handleInput={this.handleInput}
         currentItem={this.state.currentItem}
         />
-        <TodoItems 
+      <TodoItems
+        title={"Active:"}
+        entries={this.state.items}
+        showComplete={false}
+        toggleComplete={this.toggleComplete}
+        />
+      <TodoItems
+        title={"Completed:"}
         entries={this.state.items}
         deleteItem={this.deleteItem}
+        showComplete={true}
+        toggleComplete={this.toggleComplete}
         />
       </div>
     )

@@ -4,6 +4,7 @@ class TodoList extends Component {
         this.props.inputElement.current.focus()
     }
   render() {
+    console.log("TodoList render() called.")
     return (
       <div className="todoListMain">
         <div className="header">
